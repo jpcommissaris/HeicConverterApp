@@ -3,12 +3,26 @@
 import { saveAs } from "file-saver";
 import heic2any from "heic2any";
 import JSZip from "jszip";
-import { AlertCircle, CheckCircle, Clock, Download, FileImage, Upload, X } from "lucide-react";
+import {
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Download,
+  FileImage,
+  Upload,
+  X,
+} from "lucide-react";
 import React, { useCallback, useId, useState } from "react";
 import { type FileRejection, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -87,26 +101,31 @@ const DropZone = React.memo(({ outputFormat, onFilesAdded }: DropZoneProps) => {
 
       onFilesAdded(newFiles);
 
-      const skippedCount = newFiles.filter((f) => f.status === "skipped").length;
+      const skippedCount = newFiles.filter(
+        (f) => f.status === "skipped"
+      ).length;
       if (skippedCount > 0) {
-        toast.info(`${skippedCount} non-HEIC file(s) skipped. Only HEIC/HEIF files are converted.`);
+        toast.info(
+          `${skippedCount} non-HEIC file(s) skipped. Only HEIC/HEIF files are converted.`
+        );
       }
     },
     [outputFormat, onFilesAdded]
   );
 
-  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
-    accept: {
-      "image/heic": [".heic"],
-      "image/heif": [".heif"],
-      "image/*": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
-    },
-    multiple: true,
-    onDrop,
-    onDragEnter: undefined,
-    onDragOver: undefined,
-    onDragLeave: undefined,
-  });
+  const { getRootProps, getInputProps, isDragActive, isDragReject } =
+    useDropzone({
+      accept: {
+        "image/heic": [".heic"],
+        "image/heif": [".heif"],
+        "image/*": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp"],
+      },
+      multiple: true,
+      onDrop,
+      onDragEnter: undefined,
+      onDragOver: undefined,
+      onDragLeave: undefined,
+    });
 
   return (
     <Card>
@@ -116,7 +135,8 @@ const DropZone = React.memo(({ outputFormat, onFilesAdded }: DropZoneProps) => {
           Upload Images
         </CardTitle>
         <CardDescription>
-          Drag and drop HEIC/HEIF files or click to select. Other image formats will be skipped.
+          Drag and drop HEIC/HEIF files or click to select. Other image formats
+          will be skipped.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -126,7 +146,8 @@ const DropZone = React.memo(({ outputFormat, onFilesAdded }: DropZoneProps) => {
             "border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors",
             isDragActive && !isDragReject && "border-primary bg-primary/5",
             isDragReject && "border-red-500 bg-red-50",
-            !isDragActive && "border-muted-foreground/25 hover:border-muted-foreground/50"
+            !isDragActive &&
+              "border-muted-foreground/25 hover:border-muted-foreground/50"
           )}
         >
           <input {...getInputProps()} />
@@ -137,7 +158,9 @@ const DropZone = React.memo(({ outputFormat, onFilesAdded }: DropZoneProps) => {
             <p className="text-primary">Drop files here...</p>
           ) : (
             <div className="space-y-2">
-              <p className="text-sm">Drag & drop HEIC/HEIF files here, or click to select</p>
+              <p className="text-sm">
+                Drag & drop HEIC/HEIF files here, or click to select
+              </p>
               <p className="text-xs text-muted-foreground">
                 Supports .heic and .heif files. Other formats will be skipped.
               </p>
@@ -207,8 +230,13 @@ const ConversionSettings = React.memo(
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Conversion Settings</span>
-            <Button variant="outline" size="sm" onClick={onClearFiles} disabled={isConverting}>
-              <X className="h-4 w-4 mr-2" />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onClearFiles}
+              disabled={isConverting}
+            >
+              <X className="h-4 w-4 mr-1" />
               Clear All
             </Button>
           </CardTitle>
@@ -221,7 +249,9 @@ const ConversionSettings = React.memo(
               </label>
               <Select
                 value={outputFormat}
-                onValueChange={(value: OutputFormat) => onOutputFormatChange(value)}
+                onValueChange={(value: OutputFormat) =>
+                  onOutputFormatChange(value)
+                }
                 disabled={isConverting}
               >
                 <SelectTrigger id={outputFormatId}>
@@ -236,7 +266,10 @@ const ConversionSettings = React.memo(
 
             {outputFormat === "jpeg" && (
               <div className="space-y-2">
-                <label htmlFor={qualitySliderId} className="text-sm font-medium">
+                <label
+                  htmlFor={qualitySliderId}
+                  className="text-sm font-medium"
+                >
                   Quality: {quality[0]}%
                 </label>
                 <Slider
@@ -271,7 +304,7 @@ const ConversionSettings = React.memo(
 
             {completedCount > 0 && (
               <Button variant="outline" onClick={onDownloadAll}>
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-1" />
                 Download All
               </Button>
             )}
@@ -333,7 +366,9 @@ const FileItem = React.memo(({ file, onDownload }: FileItemProps) => {
       <div className="flex items-center gap-3 flex-1 min-w-0">
         {getStatusIcon(file.status)}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium truncate">{file.originalFile.name}</p>
+          <p className="text-sm font-medium truncate">
+            {file.originalFile.name}
+          </p>
           <p className="text-xs text-muted-foreground">
             {getStatusText(file.status)}
             {file.status === "done" && ` → ${file.fileName}`}
@@ -420,7 +455,9 @@ export default function ImageConverter() {
 
       // Update status to converting
       setFiles((prev) =>
-        prev.map((f) => (f.id === file.id ? { ...f, status: "converting" as FileStatus } : f))
+        prev.map((f) =>
+          f.id === file.id ? { ...f, status: "converting" as FileStatus } : f
+        )
       );
 
       try {
@@ -441,7 +478,10 @@ export default function ImageConverter() {
                   status: "done" as FileStatus,
                   outputBlob: blob,
                   downloadUrl,
-                  fileName: generateOutputFileName(f.originalFile.name, outputFormat),
+                  fileName: generateOutputFileName(
+                    f.originalFile.name,
+                    outputFormat
+                  ),
                 }
               : f
           )
@@ -454,7 +494,8 @@ export default function ImageConverter() {
               ? {
                   ...f,
                   status: "failed" as FileStatus,
-                  error: error instanceof Error ? error.message : "Unknown error",
+                  error:
+                    error instanceof Error ? error.message : "Unknown error",
                 }
               : f
           )
@@ -483,7 +524,9 @@ export default function ImageConverter() {
   }, []);
 
   const downloadAll = useCallback(async () => {
-    const completedFiles = files.filter((f) => f.status === "done" && f.outputBlob);
+    const completedFiles = files.filter(
+      (f) => f.status === "done" && f.outputBlob
+    );
 
     if (completedFiles.length === 0) {
       toast.error("No files to download");
@@ -534,11 +577,14 @@ export default function ImageConverter() {
 
   return (
     <div className="min-h-screen bg-background p-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-4xl mx-auto space-y-6 pt-4">
         <header className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">HEIC to JPEG/PNG Converter</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            HEIC to JPEG/PNG Converter
+          </h1>
           <p className="text-muted-foreground">
-            Convert HEIC/HEIF images to JPEG or PNG format entirely in your browser
+            Convert HEIC/HEIF images to JPEG or PNG format entirely in your
+            browser
           </p>
         </header>
 
@@ -564,7 +610,8 @@ export default function ImageConverter() {
         <FileList files={files} onDownloadFile={downloadFile} />
 
         <footer className="text-center text-md text-muted-foreground">
-          All processing happens in your browser. No files are uploaded to any server.
+          All processing happens in your browser. No files are uploaded to any
+          server.
         </footer>
       </div>
     </div>

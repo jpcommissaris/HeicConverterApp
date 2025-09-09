@@ -30,7 +30,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Image Converter App" }],
   creator: "Image Converter App",
   publisher: "Image Converter App",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || ""),
+  metadataBase: process.env.NEXT_PUBLIC_BASE_URL
+    ? new URL(process.env.NEXT_PUBLIC_BASE_URL)
+    : undefined,
   openGraph: {
     title: "HEIC to JPEG/PNG Converter",
     description:
@@ -68,7 +70,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         {children}
         <Toaster />
       </body>
